@@ -37,4 +37,3 @@ data = pd.DataFrame({
 churn_predictor = ChurnPredictor(data)
 churn_predictor.calculate_churn_probability()
 print("Retention rate:", churn_predictor.calculate_retention_rate())
-
