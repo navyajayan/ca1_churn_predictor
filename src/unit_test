@@ -1,0 +1,26 @@
+import unittest
+import pandas as pd
+from churn_predictor import ChurnPredictor
+
+class TestChurnPredictor(unittest.TestCase):
+    
+    def setUp(self):
+        data = pd.DataFrame({
+            'Customer_ID': [1, 2, 3],
+            'Contract_Type': ['Month-to-Month', 'One-Year', 'Two-Year'],
+            'Monthly_Charges': [70, 50, 90],
+            'Tenure': [5, 15, 30],
+            'Churn_Flag': [1, 0, 0]
+        })
+        self.churn_predictor = ChurnPredictor(data)
+
+    def test_calculate_retention_rate(self):
+        retention_rate = self.churn_predictor.calculate_retention_rate()
+        self.assertEqual(retention_rate, 2/3)
+
+    def test_calculate_churn_probability(self):
+        self.churn_predictor.calculate_churn_probability()
+        self.assertIn('Churn_Prob', self.churn_predictor.data.columns)
+
+if __name__ == '__main__':
+    unittest.main()

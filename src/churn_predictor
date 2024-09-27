@@ -1,0 +1,40 @@
+class ChurnPredictor:
+    def __init__(self, data):
+        self.data = data
+        self.model = None
+
+    # Method to calculate churn probability
+    def calculate_churn_probability(self):
+        # Example: Simple probability based on tenure
+        self.data['Churn_Prob'] = self.data['Tenure'].apply(lambda x: 1 if x < 12 else 0)
+
+    # Method to track customer retention rate
+    def calculate_retention_rate(self):
+        retained_customers = self.data[self.data['Churn_Flag'] == 0]
+        return len(retained_customers) / len(self.data)
+
+    # Method to train a model for churn prediction
+    def train_model(self, X, y):
+        from sklearn.model_selection import train_test_split
+        from sklearn.linear_model import LogisticRegression
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        self.model = LogisticRegression()
+        self.model.fit(X_train, y_train)
+        return self.model.score(X_test, y_test)
+
+# Example usage:
+import pandas as pd
+
+data = pd.DataFrame({
+    'Customer_ID': [1, 2, 3],
+    'Contract_Type': ['Month-to-Month', 'One-Year', 'Two-Year'],
+    'Monthly_Charges': [70, 50, 90],
+    'Tenure': [5, 15, 30],
+    'Churn_Flag': [1, 0, 0]
+})
+
+churn_predictor = ChurnPredictor(data)
+churn_predictor.calculate_churn_probability()
+print("Retention rate:", churn_predictor.calculate_retention_rate())
+

@@ -1,0 +1,20 @@
+from tpot import TPOTClassifier
+from sklearn.model_selection import train_test_split
+
+# Prepare data
+X = data[['Contract_Type', 'Monthly_Charges', 'Tenure']]  # Your features
+y = data['Churn_Flag']  # Your target
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# AutoML with TPOT
+tpot = TPOTClassifier(verbosity=2, generations=5, population_size=20)
+tpot.fit(X_train, y_train)
+
+# Export the best model
+tpot.export('best_model_pipeline.py')
+
+# Evaluate the model
+accuracy = tpot.score(X_test, y_test)
+print(f"Accuracy: {accuracy}")
